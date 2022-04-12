@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: envoy-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: envoy-front
+  template:
+    metadata:
+      labels:
+        app: envoy-front
+    spec:
+      containers:
+      - name: envoy-front
+        image: envoyproxy/envoy:v1.20-latest
+        resources: {}
+        ports:
+        - name: http
+          containerPort: 80
+        volumeMounts:
+        - name: envoy-front-config
+          mountPath: /etc/envoy
+      volumes:
+      - name: envoy-front-config
+        configMap:
+          name: envoy-front

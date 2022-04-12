@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpbin
+  template:
+    metadata:
+      labels:
+        app: httpbin
+    spec:
+      containers:
+      - name: httpbin
+        image: hashicorp/http-echo:latest
+        resources: {}
+        args: ["-text", "Hello from HTTPBIN"]
+        ports:
+        - name: httpbin-port
+          containerPort: 5678
+      - name: envoy
+        image: envoyproxy/envoy:v1.20-latest
+        resources: {}
+        ports:
+        - name: envoy-port
+          containerPort: 80
+        volumeMounts:
+        - name: envoy-httpbin-config
+          mountPath: /etc/envoy
+      volumes:
+        - name: envoy-httpbin-config
+          configMap:
+            name: envoy-httpbin
