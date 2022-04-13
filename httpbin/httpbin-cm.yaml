@@ -25,8 +25,9 @@ data:
                   - "*"
                   routes:
                   - match:
-                      prefix: "/echo"
+                      prefix: "/bin/"
                     route:
+                      prefix_rewrite: "/"
                       cluster: local_service
               http_filters:
               - name: envoy.filters.http.router
@@ -44,7 +45,7 @@ data:
                 address:
                   socket_address:
                     address: 127.0.0.1
-                    port_value: 5678
+                    port_value: 5000
     admin:
       address:
         socket_address:

@@ -8,8 +8,8 @@ spec:
     app: httpbin
   ports:
   - name: httpbin-envoy
-    port: 5678
-    targetPort: 5678
+    port: 5000
+    targetPort: 5000
   - name: envoy-sidecar
     port: 8786
     targetPort: 80

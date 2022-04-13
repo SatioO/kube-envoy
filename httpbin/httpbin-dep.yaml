@@ -14,12 +14,11 @@ spec:
     spec:
       containers:
       - name: httpbin
-        image: hashicorp/http-echo:latest
+        image: sbrakl/flask:latest
         resources: {}
-        args: ["-text", "Hello from HTTPBIN"]
         ports:
         - name: httpbin-port
-          containerPort: 5678
+          containerPort: 5000
       - name: envoy
         image: envoyproxy/envoy:v1.20-latest
         resources: {}
