@@ -16,6 +16,7 @@ spec:
       - name: envoy-gateway
         image: envoyproxy/envoy:v1.20-latest
         resources: {}
+        args: ["-c", "/etc/envoy/envoy.yaml", "--service-cluster","front-proxy","--service-node","front-proxy"]
         ports:
         - name: envoy-sidecar
           containerPort: 8786
