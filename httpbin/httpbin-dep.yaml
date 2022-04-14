@@ -25,6 +25,11 @@ spec:
         ports:
         - name: envoy-port
           containerPort: 80
+        env:
+          - name: SERVICE_NAME
+            value: httpbin-svc
+          - name: SERVICE_PORT
+            value: "8786"
         volumeMounts:
         - name: envoy-httpbin-config
           mountPath: /etc/envoy

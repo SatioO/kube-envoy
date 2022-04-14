@@ -18,26 +18,9 @@ data:
               codec_type: AUTO
               stat_prefix: ingress_http
               http_filters:
-                - name: envoy.filters.http.jwt_authn
-                  typed_config:
-                    "@type": type.googleapis.com/envoy.extensions.filters.http.jwt_authn.v3.JwtAuthentication
-                    providers:
-                      provider1:
-                        issuer: https://geniome.com
-                        audiences:
-                        - manager
-                        - admin
-                        clock_skew_seconds: 30
-                        local_jwks:
-                          inline_string: '{ "keys":[ { "kty": "RSA", "n": "nBtevsc3gFYk8uSY6-lszYW2Cl5bu4G8QPL-QfVZ18EzgyebHAovkZZnLdTfiyf8J80clp4aebmLS7K1nQHE-NfgqHOQP8F5YBRIL1p44WkO9R7914i_U3UGmN9gLfXDzI5vU5Bm_0qh_-4X417aLZAZ80ApEtLXhbyPdAZwtPPJw0W6MbpmPnr1FVsSYc5UuKXnI8l11N5UQXYtO6lie3ABO_KmlHOCzhfsNKoMS_2brKi98IPvmnBT-tjSNooYF1CaXEEbU7RXuk4DxSVPvZOxBriOgETS2rgQOaPvWzLPRb9Nq7yarazFsD0rdFrrj3EsL1trBDKAVpq164QkgAUQ4dBgLeoNrmMfo1VWo_TfCHH4Ttst-rm5ar835I1Vw3_rVcSWwrni2NrWgzKQvLzkxGHyrHAtMRchz4H35x_V-4ev8nUCyW4ZoFmyNSaDYw_siZXW8e5FwQ-rMQF5u_QYYI95tW2kj6zrgx41Z4LnYaBqeIVHzAKQKspWkbOj5g6tJ4KOVaoiaCMjMVxuVbEHnzMD78sDM4Gaw3_PrEdWFBZXTX7FYy7uvnquvW5QbftacyZ13RpGhihMJwxWKY3xHFVz9gHoWcHNMFS4DjqSBcNJOHJFIpzJ-JZYrV4CjDV_Qd3WyPmCmpeNkooJKv-qc4Ukriee-7mD-Y2Z508","e": "AQAB", "alg": "RS256", "kid": "gAbc4fQV9Mqk5wAKNrfCFg3MGy5TOeXO0Ll2457_0xA", "use": "sig"}]}'
-                    rules:
-                      - match:
-                          prefix: /
-                        requires:
-                          provider_name: provider1
-                - name: envoy.filters.http.router
-                  typed_config:
-                    "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+              - name: envoy.filters.http.router
+                typed_config:
+                  "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
               route_config:
                   name: local_route
                   virtual_hosts:
