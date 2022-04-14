@@ -14,22 +14,17 @@ spec:
     spec:
       containers:
       - name: httpbin
-        image: sbrakl/flask:latest
+        image: kennethreitz/httpbin:latest
         resources: {}
         ports:
-        - name: httpbin-port
-          containerPort: 5000
+        - name: envoy-httpbin
+          containerPort: 80
       - name: envoy
         image: envoyproxy/envoy:v1.20-latest
         resources: {}
         ports:
-        - name: envoy-port
-          containerPort: 80
-        env:
-          - name: SERVICE_NAME
-            value: httpbin-svc
-          - name: SERVICE_PORT
-            value: "8786"
+        - name: envoy-sidecar
+          containerPort: 8000
         volumeMounts:
         - name: envoy-httpbin-config
           mountPath: /etc/envoy

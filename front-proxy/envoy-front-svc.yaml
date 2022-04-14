@@ -7,7 +7,7 @@ spec:
   selector:
     app: envoy-gateway
   ports:
-  - name: http
+  - name: envoy-sidecar-port
     protocol: TCP
-    port: 8080
-    targetPort: 80
+    port: 8786
+    targetPort: envoy-sidecar

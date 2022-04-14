@@ -7,12 +7,9 @@ spec:
   selector:
     app: httpbin
   ports:
-  - name: httpbin-envoy
-    port: 5000
-    targetPort: 5000
-  - name: envoy-sidecar
-    port: 8786
-    targetPort: 80
-  - name: envoy-admin
-    port: 8001
-    targetPort: 8001
+  - name: envoy-httpbin-port
+    port: 80
+    targetPort: envoy-httpbin
+  - name: envoy-sidecar-port
+    port: 8000
+    targetPort: envoy-sidecar

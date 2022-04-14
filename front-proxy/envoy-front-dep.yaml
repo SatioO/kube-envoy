@@ -17,8 +17,8 @@ spec:
         image: envoyproxy/envoy:v1.20-latest
         resources: {}
         ports:
-        - name: http
-          containerPort: 80
+        - name: envoy-sidecar
+          containerPort: 8786
         volumeMounts:
         - name: envoy-gateway-config
           mountPath: /etc/envoy
