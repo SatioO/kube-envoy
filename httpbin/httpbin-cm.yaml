@@ -70,31 +70,6 @@ data:
                   path: "/dev/stdout"
                   typed_json_format: 
                     "@timestamp": "%START_TIME%"
-                    client:
-                      address: "%DOWNSTREAM_REMOTE_ADDRESS%"
-                      certificate:
-                        local:
-                          subject: "%DOWNSTREAM_LOCAL_SUBJECT%"
-                          uri_san: "%DOWNSTREAM_LOCAL_URI_SAN%"
-                        peer:
-                          cert_v_end: "%DOWNSTREAM_PEER_CERT_V_END%"
-                          cert_v_start: "%DOWNSTREAM_PEER_CERT_V_START%"
-                          certificate: "%DOWNSTREAM_PEER_CERT%"
-                          issuer: "%DOWNSTREAM_PEER_ISSUER%"
-                          serial: "%DOWNSTREAM_PEER_SERIAL%"
-                          uri_san: "%DOWNSTREAM_PEER_URI_SAN%"
-                      direct:
-                        remote:
-                          address: "%DOWNSTREAM_DIRECT_REMOTE_ADDRESS%"
-                      local:
-                        address: "%DOWNSTREAM_LOCAL_ADDRESS%"
-                      remote:
-                        address_no_port: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
-                      sni: "%REQUESTED_SERVER_NAME%"
-                      tls:
-                        cipher: "%DOWNSTREAM_TLS_CIPHER%"
-                        session_id: "%DOWNSTREAM_TLS_SESSION_ID%"
-                        version: "%DOWNSTREAM_TLS_VERSION%"
                     envoy:
                       route:
                         name: "%ROUTE_NAME%"
