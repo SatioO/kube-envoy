@@ -51,7 +51,7 @@ data:
                             prefix_rewrite: "/"
                             cluster: httpbin-front
                         - match:
-                            prefix: "/service/1"
+                            prefix: "/"
                           route:
                             cluster: service1
                     http_filters:
