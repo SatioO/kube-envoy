@@ -23,6 +23,10 @@ data:
                   request_header:
                     name: "session-id"
                     default_value: "missing"
+                - tag: trace-id
+                  request_header:
+                    name: "X-B3-TraceId"
+                    default_value: "missing"
                 - tag: correlation-id
                   request_header: 
                     name: "correlation-id"
@@ -148,6 +152,20 @@ data:
             typed_config:
               "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
               tracing:
+                verbose: true
+                custom_tags:
+                - tag: session-id
+                  request_header:
+                    name: "session-id"
+                    default_value: "missing"
+                - tag: trace-id
+                  request_header:
+                    name: "X-B3-TraceId"
+                    default_value: "missing"
+                - tag: correlation-id
+                  request_header: 
+                    name: "correlation-id"
+                    default_value: "missing"
                 provider:
                   name: envoy.tracers.zipkin
                   typed_config:

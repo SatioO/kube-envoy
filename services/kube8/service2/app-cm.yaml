@@ -23,6 +23,10 @@ data:
                   request_header:
                     name: "session-id"
                     default_value: "missing"
+                - tag: trace-id
+                  request_header:
+                    name: "X-B3-TraceId"
+                    default_value: "missing"
                 - tag: correlation-id
                   request_header: 
                     name: "correlation-id"
