@@ -1,28 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: service-1
+  name: service2
 spec:
   selector:
     matchLabels:
-      app: service-1
+      app: service2
   template:
     metadata:
       labels:
-        app: service-1
+        app: service2
     spec:
       containers:
-      - name: service-1
+      - name: service2
         image: vaibhavsatam/envoy-service1
         env:
         - name: SERVICE_NAME
-          value: service-1
+          value: service2
         resources:
           limits:
             memory: "128Mi"
             cpu: "500m"
         ports:
-        - containerPort: 5000
+        - name: envoy-service2
+          containerPort: 5000
       - name: envoy-sidecar
         image: envoyproxy/envoy:v1.20-latest
         resources:
@@ -32,14 +33,14 @@ spec:
         args: ["-c", "/etc/envoy/envoy.yaml", "--service-cluster","${SERVICE_NAME}","--service-node","${SERVICE_NAME}"]
         env:
         - name: SERVICE_NAME
-          value: service-1
+          value: service2
         ports:
         - name: envoy-sidecar
           containerPort: 8000
         volumeMounts:
-        - name: envoy-service-config
+        - name: envoy-service2-config
           mountPath: /etc/envoy
       volumes:
-        - name: envoy-service-config
+        - name: envoy-service2-config
           configMap:
-            name: service-config
+            name: service2-config

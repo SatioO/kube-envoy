@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: service-config
+  name: service1-config
 data:
   envoy.yaml: |
     static_resources:

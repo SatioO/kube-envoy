@@ -50,6 +50,14 @@ data:
                           route:
                             prefix_rewrite: "/"
                             cluster: httpbin-front
+                        - match:
+                            prefix: "/service/1"
+                          route:
+                            cluster: service1
+                        - match:
+                            prefix: "/service/2"
+                          route:
+                            cluster: service2
                     http_filters:
                     - name: envoy.filters.http.tap
                       typed_config:
@@ -136,6 +144,30 @@ data:
                             version: "1.16"
                           user_agent.name: "%REQ(USER-AGENT)%"      
       clusters:
+      - name: service1
+        type: STRICT_DNS
+        lb_policy: ROUND_ROBIN
+        load_assignment:
+          cluster_name: service1
+          endpoints:
+          - lb_endpoints:
+            - endpoint:
+                address:
+                  socket_address:
+                    address: service1
+                    port_value: 8000
+      - name: service2
+        type: STRICT_DNS
+        lb_policy: ROUND_ROBIN
+        load_assignment:
+          cluster_name: service2
+          endpoints:
+          - lb_endpoints:
+            - endpoint:
+                address:
+                  socket_address:
+                    address: service2
+                    port_value: 8000
       - name: httpbin-front
         type: STRICT_DNS
         lb_policy: ROUND_ROBIN

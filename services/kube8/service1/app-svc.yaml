@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service1
+spec:
+  selector:
+    app: service1
+  ports:
+  - name: envoy-service1-port
+    port: 5000
+    targetPort: envoy-service1
+  - name: envoy-sidecar-port
+    port: 8000
+    targetPort: envoy-sidecar
