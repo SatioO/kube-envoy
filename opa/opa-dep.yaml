@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opa
+  labels:
+    app: opa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opa
+  template:
+    metadata:
+      labels:
+        app: opa
+      name: opa
+    spec:
+      containers:
+      - name: opa
+        image: openpolicyagent/opa:0.39.0-istio
+        ports:
+        - name: http
+          containerPort: 8181
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        args:
+        - "run"
+        - "--ignore=.*"  # exclude hidden dirs created by Kubernetes
+        - "--server"
+        - --log-format=json-pretty
+        - --set=plugins.envoy_ext_authz_grpc.addr=:9002
+        - --set=decision_logs.console=true
+        - "/policies"
+        volumeMounts:
+        - readOnly: true
+          mountPath: /policies
+          name: sample-policy
+      volumes:
+      - name: sample-policy
+        configMap:
+          name: sample-policy

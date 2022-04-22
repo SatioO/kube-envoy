@@ -60,6 +60,15 @@ data:
                         sinks:
                           - file_per_tap:
                               path_prefix: /tmp/any/
+              
+              - name: envoy.filters.http.ext_authz
+                typed_config:
+                  "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthz
+                  grpc_service:
+                    envoy_grpc:
+                      cluster_name: ext_authz-opa-service
+                    timeout: 0.250s
+                  transport_api_version: V3
               - name: envoy.filters.http.router
                 typed_config:
                   "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
@@ -68,69 +77,6 @@ data:
                 typed_config:
                   "@type": type.googleapis.com/envoy.extensions.access_loggers.file.v3.FileAccessLog
                   path: "/dev/stdout"
-                  typed_json_format: 
-                    "@timestamp": "%START_TIME%"
-                    envoy:
-                      route:
-                        name: "%ROUTE_NAME%"
-                      upstream:
-                        cluster: "%UPSTREAM_CLUSTER%"
-                        localaddress: "%UPSTREAM_LOCAL_ADDRESS%"
-                        transport_failure_reason: "%UPSTREAM_TRANSPORT_FAILURE_REASON%"
-                    host:
-                      hostname: "%HOSTNAME%"
-                    http:
-                      request:
-                        body:
-                          bytes: "%BYTES_RECEIVED%"
-                        duration: "%DURATION%"
-                        duration_req: "%REQUEST_DURATION%"
-                        headers:
-                          accept: "%REQ(ACCEPT)%"
-                          authority: "%REQ(:AUTHORITY)%"
-                          content-length: "%REQ(CONTENT-LENGTH)%"
-                          content-type: "%REQ(CONTENT-TYPE)%"
-                          host: "%REQ(HOST)%"
-                          id: "%REQ(X-REQUEST-ID)%"
-                          session-id: "%REQ(SESSION-ID)%"
-                          correlation-id: "%REQ(CORRELATION-ID)%"
-                          x_forwarded_for: "%REQ(X-FORWARDED-FOR)%"
-                          x_forwarded_proto: "%REQ(X-FORWARDED-PROTO)%"
-                          x_envoy_internal: "%REQ(X-ENVOY-INTERNAL)%"
-                          x_envoy_decorator_operation: "%REQ(X-ENVOY-DECORATOR-OPERATION)%"
-                          x_envoy_expected_rq_timeout_ms: "%REQ(X-ENVOY-EXPECTED-RQ-TIMEOUT-MS)%"
-                          x_b3_traceid: "%REQ(X-B3-TRACEID)%"
-                          x_b3_parentspanid: "%REQ(X-B3-PARENTSPANID)%"
-                          x_b3_spanid: "%REQ(X-B3-SPANID)%"
-                          x_b3_sampled: "%REQ(X-B3-SAMPLED)%"
-                        method: "%REQ(:METHOD)%"
-                        path: "%REQ(X-ENVOY-ORIGINAL-PATH?:PATH)%"
-                      response:
-                        body:
-                          bytes: "%BYTES_SENT%"
-                        duration_resp: "%RESPONSE_DURATION%"
-                        duration_tx: "%RESPONSE_TX_DURATION%"
-                        flags: "%RESPONSE_FLAGS%"
-                        headers:
-                          access-control-allow-origin: "%RESP(ACCESS-CONTROL-ALLOW-ORIGIN)%"
-                          content-length: "%RESP(CONTENT-LENGTH)%"
-                          content-type: "%RESP(CONTENT-TYPE)%"
-                          date: "%RESP(DATE)%"
-                          server: "%RESP(SERVER)%"
-                        status_code: "%RESPONSE_CODE%"
-                        status_code_details: "%RESPONSE_CODE_DETAILS%"
-                      version: "%PROTOCOL%"
-                    log:
-                      level: "info"  # default envoy log level
-                    network:
-                      direction: "inbound"
-                    server:
-                      address: "%UPSTREAM_HOST%"
-                    service:
-                      name: "envoy"
-                      version: "1.16"
-                    user_agent.name: "%REQ(USER-AGENT)%"
-              
       clusters:
       - name: httpbin-cluster
         type: STRICT_DNS
@@ -157,6 +103,23 @@ data:
                   socket_address:
                     address: jaeger-collector
                     port_value: 9411
+      - name: ext_authz-opa-service
+        type: STRICT_DNS
+        lb_policy: ROUND_ROBIN
+        typed_extension_protocol_options:
+          envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+            "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+            explicit_http_config:
+              http2_protocol_options: {}
+        load_assignment:
+          cluster_name: ext_authz-opa-service
+          endpoints:
+          - lb_endpoints:
+            - endpoint:
+                address:
+                  socket_address:
+                    address: opa
+                    port_value: 9002
     admin:
       access_log_path: "/dev/null"
       address:
