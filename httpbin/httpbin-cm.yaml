@@ -118,7 +118,7 @@ data:
             - endpoint:
                 address:
                   socket_address:
-                    address: opa
+                    address: 127.0.0.1
                     port_value: 9002
     admin:
       access_log_path: "/dev/null"

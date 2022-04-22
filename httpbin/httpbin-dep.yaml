@@ -29,7 +29,31 @@ spec:
         volumeMounts:
         - name: envoy-httpbin-config
           mountPath: /etc/envoy
+      - name: opa
+        image: openpolicyagent/opa:latest-envoy
+        ports:
+        - name: http
+          containerPort: 8181
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        args:
+        - "run"
+        - "--ignore=.*"  # exclude hidden dirs created by Kubernetes
+        - "--server"
+        - --log-format=json-pretty
+        - --set=plugins.envoy_ext_authz_grpc.addr=:9002
+        - --set=decision_logs.console=true
+        - "/policies"
+        volumeMounts:
+        - name: opa-policy
+          mountPath: /policies
+          readOnly: true
       volumes:
         - name: envoy-httpbin-config
           configMap:
             name: envoy-httpbin
+        - name: opa-policy
+          configMap:
+            name: opa-policy
